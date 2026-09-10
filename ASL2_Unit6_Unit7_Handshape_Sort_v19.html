@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ASL Handshape Sort - Unit 1 + Unit 2</title>
+<style>
+:root{
+  --bg:#f4f6f9;--panel:#fff;--ink:#182230;--muted:#667386;--line:#d7dde7;
+  --accent:#315bd6;--accentSoft:#eef2ff;--good:#16804b;--goodSoft:#eaf8f0;
+  --bad:#bf3f48;--badSoft:#fff0f1;--warn:#8a6a17;--warnSoft:#fff8dc;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#142033;color:#fff;padding:16px 20px;box-shadow:0 2px 9px #0002;position:sticky;top:0;z-index:10}
+.head{max-width:1380px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+h1{margin:0;font-size:28px;line-height:1.1}.sub{font-size:14px;color:#ccd5e2;margin-top:5px}
+.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button,select,input{font:inherit}button{border:0;border-radius:10px;padding:10px 13px;font-weight:750;cursor:pointer}
+.primary{background:var(--accent);color:#fff}.secondary{background:#eef1f6;color:#162033}.dark{background:#243249;color:#fff}
+select{padding:9px 11px;border-radius:10px;border:1px solid #cfd6e2;background:#fff;color:#162033;font-weight:650}
+main{max-width:1380px;margin:16px auto;padding:0 16px 26px}
+.notice{background:var(--warnSoft);border:1px solid #eadb90;border-radius:12px;padding:10px 13px;color:#66551a;font-size:13px;margin-bottom:13px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.stats{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 11px;font-size:14px}
+.progress{height:9px;background:#dfe4ec;border-radius:99px;overflow:hidden;margin-bottom:14px}.progress > div{height:100%;width:0;background:var(--accent);transition:width .2s}
+.game{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 2px 10px #1111}
+.termArea{text-align:center;padding:10px 10px 16px;border-bottom:1px solid var(--line)}
+.prompt{color:var(--muted);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.term{font-size:36px;font-weight:850;line-height:1.15;margin:9px auto 6px;min-height:44px}.instruction{color:var(--muted);font-size:14px}.feedback{min-height:26px;margin-top:8px;font-weight:750}.feedback.good{color:var(--good)}.feedback.bad{color:var(--bad)}
+.categoryWrap{padding-top:15px}.categoryIntro{display:flex;justify-content:space-between;gap:10px;align-items:end;margin-bottom:10px}.categoryIntro h2{margin:0;font-size:17px}.categoryIntro span{color:var(--muted);font-size:12px}
+.catGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.cat{min-height:58px;background:#fff;border:2px solid #cfd6e1;border-radius:11px;padding:9px 8px;font-weight:800;color:#243148;line-height:1.12;transition:.12s;display:flex;align-items:center;justify-content:center;text-align:center}
+.sortBoard{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.sortBoard h2{margin:0;font-size:17px}.sortBoard .boardSub{color:var(--muted);font-size:12px;margin:4px 0 10px}.sortGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.sortBox{background:#f8fafc;border:1px solid #d7dde7;border-radius:12px;padding:10px;min-height:82px}.sortBox h3{font-size:13px;margin:0 0 8px;line-height:1.15}.chips{display:flex;flex-wrap:wrap;gap:5px}.chip{background:#fff;border:1px solid #cfd6e1;border-radius:999px;padding:4px 7px;font-size:11px;font-weight:700}.emptyChip{color:#8994a3;font-size:11px;font-style:italic}.sortBox.active{border-color:#9bb1f5;background:#f5f7ff}.sortBox.justAdded{outline:3px solid #bfcdfb}.game.complete .termArea,.game.complete .categoryIntro,.game.complete .catGrid,.game.complete .footerRow{display:none}.game.complete .sortBoard{margin-top:0;padding-top:0;border-top:0}
+.cat:hover{border-color:#9aa9c4;background:#f9fbff;transform:translateY(-1px)}
+.cat.wrong{border-color:var(--bad);background:var(--badSoft);color:#8f2630}.cat.correct{border-color:var(--good);background:var(--goodSoft);color:#14633d}.cat.dim{opacity:.48}
+.footerRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:13px;flex-wrap:wrap}.search{padding:9px 11px;border:1px solid var(--line);border-radius:10px;width:240px}
+.done{display:none;text-align:center;padding:26px}.done.show{display:block}.done h2{font-size:30px;margin:0 0 8px}.scoreBig{font-size:42px;font-weight:900;margin:4px 0}.small{color:var(--muted);font-size:13px}
+.teacher{margin-top:15px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}.teacher summary{font-weight:800;cursor:pointer}.teacher table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}.teacher th,.teacher td{border-bottom:1px solid var(--line);padding:7px;text-align:left;vertical-align:top}.teacher th{background:#f7f9fb}.tag{display:inline-block;background:#eef1f6;border-radius:999px;padding:3px 7px;margin:2px 4px 2px 0;font-size:11px}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:30;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.modalCard{background:#fff;border-radius:16px;max-width:740px;width:100%;padding:18px;max-height:80vh;overflow:auto}.modalCard h3{margin-top:0}.missed{display:grid;gap:7px}.missed div{padding:8px 10px;background:#fff2f2;border:1px solid #efc4c6;border-radius:9px}.hidden{display:none!important}
+@media(max-width:1080px){.catGrid{grid-template-columns:repeat(4,minmax(0,1fr))}.sortGrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.head{align-items:flex-start;flex-direction:column}.catGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.sortGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.term{font-size:30px}.search{width:100%}}
+</style>
+</head>
+<body>
+<header><div class="head">
+  <div><h1>ASL 2 Handshape Sort</h1><div class="sub">Choose the handshape category that matches the vocabulary sign.</div></div>
+  <div class="controls">
+    <select id="size"><option value="20">20 terms</option><option value="40">40 terms</option><option value="all" selected>All terms</option></select>
+    <button class="primary" id="new">New Round</button>
+    <button class="secondary" id="reset">Reset</button>
+  </div>
+</div></header>
+<main>
+  <div class="notice"><strong>Teacher-source mode:</strong> the vocabulary set is limited to the Unit 1 terms and the Unit 2 terms shown in your provided lists. Handshape categories follow your uploaded handshape deck. No AI-generated ASL hand images are used.</div>
+  <div class="topbar">
+    <div class="stats"><span class="pill">Term <b id="current">0</b>/<b id="total">0</b></span><span class="pill">First-attempt correct: <b id="firstCorrect">0</b></span><span class="pill">Current streak: <b id="streak">0</b></span></div>
+    <button class="dark" id="teacherBtn">Teacher / Missed Words</button>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+
+  <section class="game" id="game">
+    <div class="termArea">
+      <div class="prompt">Vocabulary term</div>
+      <div class="term" id="term">—</div>
+      <div class="instruction">Click the handshape category that matches your sign.</div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="categoryWrap">
+      <div class="categoryIntro"><h2>Handshape Categories</h2><span>All categories stay visible. The 3 category includes Bent 3.</span></div>
+      <div class="catGrid" id="cats"></div>
+      <div class="sortBoard">
+        <h2>Your Handshape Sort</h2>
+        <div class="boardSub">Every category stays visible. Each term appears in the category you choose after you answer it correctly. Signs with multiple handshapes accept any listed category.</div>
+        <div class="sortGrid" id="sortBoard"></div>
+      </div>
+    </div>
+    <div class="footerRow">
+      <div class="small" id="helper">One click = one answer.</div>
+      <input class="search" id="search" placeholder="Find a category…" aria-label="Find a category">
+    </div>
+  </section>
+
+  <section class="done" id="done">
+    <h2>Round complete!</h2>
+    <div class="scoreBig" id="scoreBig">0%</div>
+    <div id="scoreText"></div>
+    <p class="small">First-attempt accuracy is your main score. Use “Review Missed Words” to practice only the terms you missed.</p>
+    <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px">
+      <button class="primary" id="again">New Round</button>
+      <button class="secondary" id="practice">Practice Missed Words</button>
+    </div>
+  </section>
+
+  <details class="teacher"><summary>Teacher Mode: Complete Answer Key</summary>
+    <div class="small" style="margin-top:8px">Multiple categories mean multiple answers are accepted because the teacher deck places the term in more than one handshape section.</div>
+    <table><thead><tr><th>Vocabulary</th><th>Accepted category/categories</th></tr></thead><tbody id="key"></tbody></table>
+  </details>
+</main>
+
+<div class="modal" id="modal"><div class="modalCard">
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h3 style="margin:0">Missed Words</h3><button class="secondary" id="closeModal">Close</button></div>
+  <p class="small">These are terms that were not correct on the first attempt in the current round.</p>
+  <div class="missed" id="missed"></div>
+</div></div>
+
+<script>
+const DATA={"categories":["A/open A","B / Flat B / Open B","Bent-B","C","D","E","F","G/Q/20","H/U","I","K/P","L","M","N","O","bent/flatO","R","S","T","V or ^/2","bent - V","W","X/closed x","Y","1","3","Claw 3","4","5","Claw 5","25 hand/ 8/ open-8/","Bull / Rock-On"],"items":[{"term":"For example (show)","categories":["1","B / Flat B / Open B"]},{"term":"Schedule","categories":["4"]},{"term":"Vary","categories":["1"]},{"term":"Every night / Every morning / Every afternoon","categories":["B / Flat B / Open B","Bent-B"]},{"term":"Every week / Every year","categories":["1"]},{"term":"Take a bath","categories":["A/open A"]},{"term":"Brush hair","categories":["A/open A","X/closed x"]},{"term":"Brush teeth","categories":["1"]},{"term":"Comb","categories":["Claw 5"]},{"term":"Eat","categories":["bent/flatO"]},{"term":"Get dressed (clothes)","categories":["5"]},{"term":"Get ready","categories":["B / Flat B / Open B"]},{"term":"Get up","categories":["bent - V","V or ^/2"]},{"term":"Make up","categories":["bent/flatO"]},{"term":"Oversleep","categories":["S","bent/flatO","F"]},{"term":"Shave","categories":["X/closed x","Y"]},{"term":"Shower","categories":["S"]},{"term":"Wake up","categories":["G/Q/20","L"]},{"term":"Change clothes","categories":["X/closed x"]},{"term":"To do / activity","categories":["Claw 5","C"]},{"term":"Early","categories":["25 hand/ 8/ open-8/"]},{"term":"Jump / go to bed","categories":["H/U"]},{"term":"Fall asleep","categories":["5"]},{"term":"Rest / relax","categories":["B / Flat B / Open B"]},{"term":"Set clock / alarm","categories":["X/closed x","A/open A","1"]},{"term":"Errands","categories":["D"]},{"term":"Always","categories":["1"]},{"term":"For-for","categories":["1"]},{"term":"Never","categories":["B / Flat B / Open B"]},{"term":"Sometimes","categories":["1"]},{"term":"Use","categories":["H/U"]},{"term":"Perfume","categories":["A/open A","L"]},{"term":"Shampoo","categories":["Claw 5"]},{"term":"Ago, past","categories":["B / Flat B / Open B","Bent-B"]},{"term":"All year, year round","categories":["1"]},{"term":"ASL poetry","categories":["S"]},{"term":"Baseball","categories":["S"]},{"term":"Basketball","categories":["Claw 5"]},{"term":"Boat","categories":["B / Flat B / Open B"]},{"term":"Bowling","categories":["Claw 5"]},{"term":"Bug, ant","categories":["3","Claw 3"]},{"term":"To bungee jump","categories":["V or ^/2","bent - V"]},{"term":"To call (a name)","categories":["H/U"]},{"term":"To camp","categories":["Bull / Rock-On"]},{"term":"Come on","categories":["B / Flat B / Open B"]},{"term":"Distant future","categories":["B / Flat B / Open B"]},{"term":"During, in, on (time)","categories":["1"]},{"term":"Ears (animal)","categories":["B / Flat B / Open B"]},{"term":"To exercise, lift weights","categories":["S"]},{"term":"Fast, quick","categories":["L"]},{"term":"To fish","categories":["X/closed x"]},{"term":"To flock to","categories":["5"]},{"term":"Football","categories":["5"]},{"term":"Golf","categories":["X/closed x"]},{"term":"Gymnastics","categories":["V or ^/2"]},{"term":"Handshape","categories":["B / Flat B / Open B","A/open A"]},{"term":"To hear","categories":["3"]},{"term":"To hike","categories":["3"]},{"term":"Hockey","categories":["X/closed x"]},{"term":"To ice skate","categories":["X/closed x"]},{"term":"In a few days","categories":["3"]},{"term":"Involve, be included","categories":["5","bent/flatO"]},{"term":"To jog","categories":["S"]},{"term":"To jump (animal)","categories":["V or ^/2","bent - V"]},{"term":"Just, very recently","categories":["X/closed x"]},{"term":"Karate, martial arts","categories":["B / Flat B / Open B"]},{"term":"Last month","categories":["1"]},{"term":"Last week","categories":["1"]},{"term":"Last year","categories":["S"]},{"term":"Long","categories":["1"]},{"term":"Long time ago","categories":["5"]},{"term":"Many","categories":["S","5"]},{"term":"Next week","categories":["1"]},{"term":"Next year","categories":["1"]},{"term":"To play","categories":["Y"]},{"term":"To play cards","categories":["X/closed x"]},{"term":"Poetry","categories":["K/P"]},{"term":"Popular","categories":["5"]},{"term":"Recently, a little while ago","categories":["X/closed x"]},{"term":"To ride a bike","categories":["S"]},{"term":"To scuba dive","categories":["Claw 5"]},{"term":"To sit next to","categories":["bent - V"]},{"term":"To skateboard","categories":["bent - V"]},{"term":"To skydive","categories":["Claw 5"]},{"term":"To snowboard","categories":["A/open A","B / Flat B / Open B"]},{"term":"Soccer","categories":["B / Flat B / Open B"]},{"term":"Softball","categories":["Claw 5"]},{"term":"Soon (1-3)","categories":["F"]},{"term":"To stay","categories":["5"]},{"term":"Story / to tell a story","categories":["bent/flatO"]},{"term":"To surf","categories":["V or ^/2"]},{"term":"To swim","categories":["Bent-B"]},{"term":"To talk","categories":["4"]},{"term":"Team","categories":["T"]},{"term":"Tend to, usually","categories":["25 hand/ 8/ open-8/"]},{"term":"Tennis","categories":["X/closed x"]},{"term":"Two days ago","categories":["V or ^/2"]},{"term":"Two weeks","categories":["V or ^/2"]},{"term":"Two weeks ago","categories":["V or ^/2"]},{"term":"Umpire","categories":["bent - V"]},{"term":"Used to, before","categories":["5"]},{"term":"Volleyball (1-2)","categories":["25 hand/ 8/ open-8/"]},{"term":"Water polo","categories":["W"]},{"term":"Will, future, it will be","categories":["B / Flat B / Open B"]},{"term":"Winding road","categories":["B / Flat B / Open B"]},{"term":"Wrestling","categories":["S"]},{"term":"To be crazy for","categories":["Claw 5"]},{"term":"To experience","categories":["5","bent/flatO"]},{"term":"To be not crazy for","categories":["Claw 5"]},{"term":"Hairspray","categories":["L"]},{"term":"Cut nails","categories":["A/open A"]},{"term":"Nail polish","categories":["H/U"]},{"term":"Deodorant","categories":["X/closed x"]},{"term":"Soap","categories":["B / Flat B / Open B","Bent-B"]},{"term":"Sunscreen","categories":["Bent-B"]},{"term":"Toothpaste","categories":["L"]},{"term":"Mouth wash","categories":["C"]},{"term":"Floss","categories":["X/closed x"]},{"term":"Fit","categories":["F"]},{"term":"Match","categories":["Claw 5"]}]};
+const CATS=DATA.categories;const ALL=DATA.items.map((x,i)=>({...x,id:i}));
+let round=[],idx=0,firstCorrect=0,attempts=0,streak=0,missed=[],roundStarted=false,waiting=false,firstAttemptForCurrent=true,sortedTerms={};
+const $=id=>document.getElementById(id);
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5)}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function updateTop(){ $('current').textContent=Math.min(idx+1,round.length); $('total').textContent=round.length; $('firstCorrect').textContent=firstCorrect; $('streak').textContent=streak; $('bar').style.width=(round.length?(idx/round.length)*100:0)+'%'; }
+function buildSortBoard(){
+  sortedTerms={};
+  CATS.forEach(c=>sortedTerms[c]=[]);
+  renderSortBoard();
+}
+function renderSortBoard(highlightCat=''){
+  const board=$('sortBoard'); if(!board)return;
+  board.innerHTML='';
+  CATS.forEach(c=>{
+    const box=document.createElement('div'); box.className='sortBox'+(highlightCat===c?' active justAdded':'');
+    const h=document.createElement('h3'); h.textContent=c; box.appendChild(h);
+    const chips=document.createElement('div'); chips.className='chips';
+    const terms=sortedTerms[c]||[];
+    if(!terms.length){const e=document.createElement('span');e.className='emptyChip';e.textContent='No terms yet';chips.appendChild(e)}
+    terms.forEach(t=>{const chip=document.createElement('span');chip.className='chip';chip.textContent=t;chips.appendChild(chip)});
+    box.appendChild(chips); board.appendChild(box);
+  });
+}
+function buildCats(){
+  $('cats').innerHTML='';
+  CATS.forEach(c=>{const b=document.createElement('button');b.className='cat';b.textContent=c;b.dataset.cat=c;b.onclick=()=>answer(c,b);$('cats').appendChild(b)});
+}
+function showTerm(){
+  waiting=false; firstAttemptForCurrent=true;
+  document.querySelectorAll('.cat').forEach(b=>b.className='cat');
+  const x=round[idx];
+  if(!x){finish();return}
+  $('term').textContent=x.term; $('feedback').textContent=''; $('feedback').className='feedback'; $('helper').textContent='One click = one answer.'; updateTop();
+}
+function answer(cat,btn){
+  if(waiting)return;
+  const x=round[idx];
+  if(!x)return;
+  attempts++;
+  if(x.categories.includes(cat)){
+    if(firstAttemptForCurrent){firstCorrect++;streak++} else streak=0;
+    btn.classList.add('correct');
+    if(!sortedTerms[cat]) sortedTerms[cat]=[];
+    sortedTerms[cat].push(x.term);
+    renderSortBoard(cat);
+    $('feedback').textContent='Correct! Added to '+cat+'.'; $('feedback').className='feedback good';
+    $('helper').textContent='Great job — next term loading…';
+    waiting=true;
+    setTimeout(()=>{idx++;showTerm()},650);
+  }else{
+    if(firstAttemptForCurrent){missed.push({term:x.term,correct:x.categories,chosen:cat});firstAttemptForCurrent=false;streak=0}
+    btn.classList.add('wrong');
+    $('feedback').textContent='Try again — choose another handshape.'; $('feedback').className='feedback bad';
+    $('helper').textContent='Your first-attempt score is saved; keep trying until you get it.';
+    setTimeout(()=>btn.classList.remove('wrong'),500);
+  }
+  updateTop();
+}
+function startRound(items){
+  round=shuffle(items).map(x=>({...x})); idx=0; firstCorrect=0;attempts=0;streak=0;missed=[];roundStarted=true; waiting=false;
+  $('game').classList.remove('hidden','complete'); $('done').classList.remove('show');
+  buildCats(); buildSortBoard(); showTerm();
+}
+function newRound(){const v=$('size').value;const count=v==='all'?ALL.length:Number(v);startRound(ALL.slice(0,count))}
+function finish(){
+  waiting=true;$('bar').style.width='100%';
+  $('game').classList.add('complete');$('game').classList.remove('hidden');$('done').classList.add('show');
+  const pct=round.length?Math.round(firstCorrect/round.length*100):0;$('scoreBig').textContent=pct+'%';
+  $('scoreText').innerHTML='<b>'+firstCorrect+'</b> of <b>'+round.length+'</b> correct on the first attempt. <span class="small">Total clicks: '+attempts+'.</span>';
+}
+function practiceMissed(){
+  const items=missed.map(m=>ALL.find(x=>x.term===m.term)).filter(Boolean); if(items.length) startRound(items); else alert('No missed words in this round — great work!');
+}
+function openMissed(){
+  const box=$('missed');box.innerHTML='';
+  if(!missed.length){box.innerHTML='<div style="background:var(--goodSoft);border:1px solid #bfe5ce;color:#14633d">No first-attempt misses yet.</div>'}
+  missed.forEach(m=>{const d=document.createElement('div');d.innerHTML='<strong>'+esc(m.term)+'</strong><br><span class="small">Accepted: '+esc(m.correct.join(', '))+' · First choice: '+esc(m.chosen)+'</span>';box.appendChild(d)});
+  $('modal').classList.add('open');
+}
+$('size').onchange=newRound;$('new').onclick=newRound;$('reset').onclick=()=>startRound(round.length?round.map(x=>ALL.find(a=>a.term===x.term)).filter(Boolean):ALL.slice(0,20));$('again').onclick=newRound;$('practice').onclick=practiceMissed;$('teacherBtn').onclick=openMissed;$('closeModal').onclick=()=>$('modal').classList.remove('open');$('modal').onclick=e=>{if(e.target===$('modal'))$('modal').classList.remove('open')};
+$('search').oninput=()=>{const q=$('search').value.toLowerCase().trim();document.querySelectorAll('.cat').forEach(b=>b.classList.toggle('dim',q && !b.textContent.toLowerCase().includes(q)))};
+$('key').innerHTML=ALL.map(x=>'<tr><td>'+esc(x.term)+'</td><td>'+x.categories.map(c=>'<span class="tag">'+esc(c)+'</span>').join('')+'</td></tr>').join('');
+newRound();
+</script>
+</body>
+</html>
